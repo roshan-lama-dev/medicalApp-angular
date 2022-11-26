@@ -348,6 +348,7 @@ import { patientDetails } from './patientDetails';
   `,
 })
 export class HomeComponent {
+  // declaring an array
   patientDetails_Records: Array<patientDetails>;
 
   constructor() {
@@ -368,6 +369,7 @@ export class HomeComponent {
   pDob: string = '';
   gender: string = '';
 
+  // function to add the patient record into the database
   addToDatabase(): void {
     let emergencyField = <HTMLTableElement>(
       document.getElementById('emergencyField')
@@ -507,6 +509,8 @@ export class HomeComponent {
       console.log(this.patientDetails_Records);
     }
   }
+
+  // function to display the patient record from the database
   displayData(): void {
     let displayTable = <HTMLTableElement>document.getElementById('tabletoshow');
     if (this.patientDetails_Records.length < 0) {
@@ -532,6 +536,7 @@ export class HomeComponent {
     });
   }
 
+  // function to delete the patient record as per the patientID given by the users
   deletePatient(): void {
     let deleteMsg = <HTMLTextAreaElement>document.getElementById('deleteMsg');
     let deleteID: number = Number(
@@ -560,6 +565,7 @@ export class HomeComponent {
     this.displayData();
     console.log(deleteID);
   }
+  // fucntion to search the patient details as per the id provided by the users
   searchPatient(): void {
     let searchmsg = <HTMLTextAreaElement>document.getElementById('searchmsg');
     let searchField = <HTMLTableElement>document.getElementById('searchField');
@@ -597,6 +603,8 @@ export class HomeComponent {
       }
     });
   }
+
+  // function to display the emergency patient from the database
   displayEmergency(): void {
     let emergencyField = <HTMLTableElement>(
       document.getElementById('emergencyField')

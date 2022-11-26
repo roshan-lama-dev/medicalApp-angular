@@ -39,7 +39,7 @@ import { patientDetails } from './patientDetails';
       </div>
     </div>
 
-    <button routerLink="/">Page 1</button>
+    <button routerLink="/">Home</button>
   `,
 })
 export class Page2Component {

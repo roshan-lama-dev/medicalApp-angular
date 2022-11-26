@@ -28,3 +28,21 @@
   box-shadow: 5ch;
   min-height: 20px;
 }
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+.nav > a {
+  text-decoration: none;
+  font-size: 2rem;
+  color: black;
+  margin-right: 15px;
+  text-align: center;
+}
+
+.nav > a:hover {
+  color: rgb(220, 221, 245);
+}

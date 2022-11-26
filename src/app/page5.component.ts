@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: `
     <div class="emergencyDisplay mt-5">
       <div class="text text-center">
-        <h5>Dispplay the Emergency Patient</h5>
+        <h5>Display the Emergency Patient</h5>
         <p>Please click the display button to view the emergency patient</p>
       </div>
 
