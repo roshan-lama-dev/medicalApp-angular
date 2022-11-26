@@ -13,7 +13,7 @@ import { BadURLComponent } from './badurl.component';
 import { HomeComponent } from './home.component';
 
 import { RouterModule, Routes } from '@angular/router';
-
+import { FormsModule } from '@angular/forms';
 const myAppRoutes: Routes = [
   { path: 'page2', component: Page2Component },
   { path: 'page3', component: Page3Component },
@@ -37,7 +37,12 @@ const myAppRoutes: Routes = [
     Page4Component,
     Page5Component,
   ],
-  imports: [BrowserModule, AppRoutingModule, RouterModule.forRoot(myAppRoutes)],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    RouterModule.forRoot(myAppRoutes),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

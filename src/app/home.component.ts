@@ -1,5 +1,6 @@
 //Home Page
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { patientDetails } from './patientDetails';
 
 @Component({
   template: `
@@ -182,7 +183,7 @@ import { Component } from '@angular/core';
                 <button
                   type="button"
                   class="btn btn-primary"
-                  onclick="addToDatabase()"
+                  (click)="addToDatabase()"
                 >
                   Add New Patient
                 </button>
@@ -196,10 +197,429 @@ import { Component } from '@angular/core';
             <hr />
           </form>
         </div>
+
+        <div class="displayPatient my-5">
+          <h5 class="text-center mt-2">
+            Display the Patient List from the database
+          </h5>
+          <p class="text-center">
+            Please click the display button to display the list of the patient
+          </p>
+          <div class="col text-center">
+            <button class="btn btn-info my-5" (click)="displayData()">
+              Display Patient
+            </button>
+          </div>
+          <table class="md table">
+            <thead>
+              <tr>
+                <th scope="col">Patient Id</th>
+                <th scope="col">Patient First Name</th>
+                <th scope="col">Patient Last Name</th>
+                <th scope="col">DOB</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Insurance</th>
+                <th scope="col">Address</th>
+                <th scope="col">Contact Number</th>
+                <th scope="col">Next of Kin</th>
+                <th scope="col">Emergency</th>
+              </tr>
+            </thead>
+            <tbody id="tabletoshow"></tbody>
+          </table>
+        </div>
+
+        <!-- Delete Field -->
+        <div class="deleteField mt-5">
+          <div class="row text-center mt-5">
+            <h5>Delete the patient infromation from the database</h5>
+            <p>
+              Please enter the patient id to be deleted and press the delete
+              button
+            </p>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="patientId" class="col-sm-2 col-form-label"
+              >Enter the Patient ID to be deleted ::</label
+            >
+            <div class="col-sm-10">
+              <input
+                id="deleteID"
+                type="number"
+                class="form-control"
+                placeholder="Enter the PatientId to be removed from the database"
+              />
+            </div>
+            <div class="col"></div>
+            <div class="col">
+              <p id="deleteMsg"></p>
+            </div>
+          </div>
+          <div class="col text-center">
+            <button class="btn btn-danger" (click)="deletePatient()">
+              Delete Patient
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Field -->
+        <div class="searchPatient mt-5">
+          <div class="text text-center">
+            <h5>Search the Patient</h5>
+            <p>Please enter the Patient Id that needs to be search</p>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="patientId" class="col-sm-2 col-form-label"
+              >Enter the Patient ID to be searched ::</label
+            >
+            <div class="col-sm-10">
+              <input
+                id="searchID"
+                type="number"
+                class="form-control"
+                placeholder="Enter the PatientId to be searched from the database"
+              />
+            </div>
+            <div class="col"></div>
+            <div class="col text-center text-danger">
+              <p id="searchmsg"></p>
+            </div>
+          </div>
+          <div class="col text-center">
+            <button class="btn btn-danger" (click)="searchPatient()">
+              Search Patient
+            </button>
+          </div>
+
+          <table class="md table">
+            <thead>
+              <tr>
+                <th scope="col">Patient Id</th>
+                <th scope="col">Patient First Name</th>
+                <th scope="col">Patient Last Name</th>
+                <th scope="col">DOB</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Insurance</th>
+                <th scope="col">Address</th>
+                <th scope="col">Contact Number</th>
+                <th scope="col">Next of Kin</th>
+                <th scope="col">Emergency</th>
+              </tr>
+            </thead>
+            <tbody id="searchField"></tbody>
+          </table>
+        </div>
+
+        <!-- Dispaly Emergency Field -->
+        <div class="emergencyDisplay mt-5">
+          <div class="text text-center">
+            <h5>Dispplay the Emergency Patient</h5>
+            <p>Please click the display button to view the emergency patient</p>
+          </div>
+
+          <div class="col text-center">
+            <button class="btn btn-info" (click)="displayEmergency()">
+              Display Emergency Patient
+            </button>
+          </div>
+
+          <table class="md table">
+            <thead>
+              <tr>
+                <th scope="col">Patient Id</th>
+                <th scope="col">Patient First Name</th>
+                <th scope="col">Patient Last Name</th>
+                <th scope="col">DOB</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Insurance</th>
+                <th scope="col">Address</th>
+                <th scope="col">Contact Number</th>
+                <th scope="col">Next of Kin</th>
+                <th scope="col">Emergency</th>
+              </tr>
+            </thead>
+            <tbody id="emergencyField"></tbody>
+          </table>
+        </div>
       </div>
     </div>
-
-    <!-- <button routerLink="/">Page 1</button> -->
   `,
 })
-export class HomeComponent {}
+export class HomeComponent {
+  patientDetails_Records: Array<patientDetails>;
+
+  constructor() {
+    this.patientDetails_Records = new Array<patientDetails>();
+  }
+
+  ngOnInit() {
+    this.patientDetails_Records = new Array<patientDetails>();
+  }
+
+  sucessMsg: string = '';
+  pIdmessage: string = '';
+  pcontact: string = '';
+  pAddress: string = '';
+  insurance: string = '';
+  pFistNamemessage: string = '';
+  pLastName: string = '';
+  pDob: string = '';
+  gender: string = '';
+
+  addToDatabase(): void {
+    let emergencyField = <HTMLTableElement>(
+      document.getElementById('emergencyField')
+    );
+    let searchField = <HTMLTableElement>document.getElementById('searchField');
+    let message = <HTMLTextAreaElement>document.getElementById('message');
+    let pIdmessage = <HTMLTextAreaElement>document.getElementById('pIdmessage');
+    let pFistNamemessage = <HTMLTextAreaElement>(
+      document.getElementById('pFistNamemessage')
+    );
+    let insurance = <HTMLTextAreaElement>document.getElementById('insurance');
+    let gender = <HTMLTextAreaElement>document.getElementById('gender');
+    let pLastname = <HTMLTextAreaElement>document.getElementById('pLastName');
+    let pDob = <HTMLTextAreaElement>document.getElementById('pDob');
+    let paddress = <HTMLTextAreaElement>document.getElementById('pAddress');
+    let pcontact = <HTMLTextAreaElement>document.getElementById('pcontact');
+    let deleteMsg = <HTMLTextAreaElement>document.getElementById('deleteMsg');
+    let sucessMsg = <HTMLTextAreaElement>document.getElementById('sucessMsg');
+    let searchmsg = <HTMLTextAreaElement>document.getElementById('searchmsg');
+    let emergencyChecked = <HTMLInputElement>(
+      document.getElementById('emergency')
+    );
+
+    let pId: number = Number(
+      (<HTMLInputElement>document.getElementById('patientId')).value
+    );
+
+    if (isNaN(pId)) {
+      pIdmessage.innerHTML = 'Patient ID must be a number';
+      return;
+    } else if (pId.toString.length == 0) {
+      pIdmessage.innerHTML = 'Patient ID must be entered';
+      return;
+    }
+
+    if (this.patientDetails_Records.length > 0) {
+      this.patientDetails_Records.map((item, index) => {
+        if (pId === item.patientId) {
+          pIdmessage.innerHTML = 'Please Enter new Patient ID';
+          throw 'Unique ID required';
+        } else {
+          pIdmessage.innerHTML = '';
+        }
+      });
+    }
+
+    let pFirstName: string = String(
+      (<HTMLInputElement>document.getElementById('patientFirstName')).value
+    );
+    pFistNamemessage.innerHTML = '';
+    if (pFirstName.length == 0) {
+      pFistNamemessage.innerHTML = 'Please enter the Patient First Name';
+      return;
+    }
+    let pLastName: string = String(
+      (<HTMLInputElement>document.getElementById('patientLastName')).value
+    );
+    pLastname.innerHTML = '';
+    if (pLastName.length == 0) {
+      pLastname.innerHTML = 'Please enter the Patient Last Name';
+      return;
+    }
+    let pDOB: number = Number(
+      (<HTMLInputElement>document.getElementById('patientDOB')).value
+    );
+
+    if (pDOB) {
+      pDob.innerHTML = 'Please enter the Patient DOB';
+      // return;
+    }
+
+    gender.innerHTML = '';
+    let pgender: string = String(
+      (<HTMLInputElement>document.getElementById('genderSelect')).value
+    );
+
+    if (pgender === '') {
+      gender.innerHTML = 'Please select Gender';
+      return;
+    }
+    let pInsurance: string = String(
+      (<HTMLInputElement>document.getElementById('insuranceSelect')).value
+    );
+
+    if (pInsurance === '') {
+      insurance.innerHTML = 'Please select from one of the insurance';
+      return;
+    }
+    let pAddress: string = String(
+      (<HTMLInputElement>document.getElementById('address')).value
+    );
+    if (pAddress.length == 0) {
+      paddress.innerHTML = "Please enter the Patient's Address";
+      return;
+    }
+    let pContact: number = Number(
+      (<HTMLInputElement>document.getElementById('contactnum')).value
+    );
+    if (pContact.toString.length == 0) {
+      pcontact.innerHTML = 'Please enter the Patient Contact Number';
+      return;
+    }
+    let pNextofKin: string = String(
+      (<HTMLInputElement>document.getElementById('nextOfKin')).value
+    );
+
+    if (pNextofKin.length == 0) {
+      pNextofKin = 'null';
+    }
+
+    let pEmergency: boolean = Boolean(
+      (<HTMLInputElement>document.getElementById('emergency')).value
+    );
+
+    if (emergencyChecked.checked == true) {
+      pEmergency = true;
+    } else {
+      false;
+    }
+
+    let pDetails: patientDetails = {
+      patientId: pId,
+      patientFirstName: pFirstName,
+      patientLastName: pLastName,
+      patientDob: pDOB,
+      gender: pgender,
+      primaryInsurance: pInsurance,
+      address: pAddress,
+      patientContact: pContact,
+      patientNextofkin: pNextofKin,
+      patientEmergency: pEmergency,
+    };
+
+    if (this.patientDetails_Records.push(pDetails)) {
+      sucessMsg.innerHTML = 'Data Added Successfully';
+
+      console.log(this.patientDetails_Records);
+    }
+  }
+  displayData(): void {
+    let displayTable = <HTMLTableElement>document.getElementById('tabletoshow');
+    if (this.patientDetails_Records.length < 0) {
+      // message?.innerHTML = "Please enter the patient deatils first";
+    }
+    displayTable.innerHTML = '';
+
+    this.patientDetails_Records.map((item, index) => {
+      displayTable.innerHTML += `
+      <tr>
+      <th scope="row">${item.patientId}</th>
+      <td>${item.patientFirstName}</td>
+      <td>${item.patientLastName}</td>
+      <td>${item.patientDob}</td>
+      <td>${item.gender}</td>
+      <td>${item.primaryInsurance}</td>
+      <td>${item.address}</td>
+      <td>${item.patientContact}</td>
+      <td>${item.patientNextofkin}</td>
+      <td>${item.patientEmergency}</td>
+    </tr>
+      `;
+    });
+  }
+
+  deletePatient(): void {
+    let deleteMsg = <HTMLTextAreaElement>document.getElementById('deleteMsg');
+    let deleteID: number = Number(
+      (<HTMLInputElement>document.getElementById('deleteID')).value
+    );
+
+    for (let i = 0; i < this.patientDetails_Records.length; i++) {
+      let pIDDelete = this.patientDetails_Records[i].patientId;
+      console.log(pIDDelete);
+      if (pIDDelete === deleteID) {
+        if (
+          window.confirm('Do you want to remove the patient from the Database')
+        ) {
+          // str.innerHTML = "The ID you entered doesnot exist";
+          this.patientDetails_Records.splice(i, 1);
+          deleteMsg.innerHTML =
+            'The patient with the id ' + `${deleteID}` + ' is deleted';
+        }
+        // console.log("Delete possible");
+      } else {
+        deleteMsg.innerHTML = "The Id doesn't exist";
+        // str = "THe ";
+      }
+    }
+
+    this.displayData();
+    console.log(deleteID);
+  }
+  searchPatient(): void {
+    let searchmsg = <HTMLTextAreaElement>document.getElementById('searchmsg');
+    let searchField = <HTMLTableElement>document.getElementById('searchField');
+    let searchID: number = Number(
+      (<HTMLInputElement>document.getElementById('searchID')).value
+    );
+    searchmsg.innerHTML = '';
+    console.log(searchID);
+
+    if (this.patientDetails_Records.length < 0) {
+      searchmsg.innerHTML =
+        'The patient details with the id ' + `${searchID}` + " doesn't exist";
+    }
+    this.patientDetails_Records.map((item, index) => {
+      if (searchID === item.patientId) {
+        searchField.innerHTML = '';
+
+        searchField.innerHTML += `
+        <tr>
+        <th scope="row">${item.patientId}</th>
+        <td>${item.patientFirstName}</td>
+        <td>${item.patientLastName}</td>
+        <td>${item.patientDob}</td>
+        <td>${item.gender}</td>
+        <td>${item.primaryInsurance}</td>
+        <td>${item.address}</td>
+        <td>${item.patientContact}</td>
+        <td>${item.patientNextofkin}</td>
+        <td>${item.patientEmergency}</td>
+      </tr>
+        `;
+      } else if (searchID !== item.patientId) {
+        searchmsg.innerHTML =
+          'The patient details with the id' + `${searchID}` + " doesn't exist";
+      }
+    });
+  }
+  displayEmergency(): void {
+    let emergencyField = <HTMLTableElement>(
+      document.getElementById('emergencyField')
+    );
+    this.patientDetails_Records.map((item) => {
+      if (item.patientEmergency === true) {
+        // emergencyField.innerHTML = "";
+
+        emergencyField.innerHTML += `
+        <tr>
+        <th scope="row">${item.patientId}</th>
+        <td>${item.patientFirstName}</td>
+        <td>${item.patientLastName}</td>
+        <td>${item.patientDob}</td>
+        <td>${item.gender}</td>
+        <td>${item.primaryInsurance}</td>
+        <td>${item.address}</td>
+        <td>${item.patientContact}</td>
+        <td>${item.patientNextofkin}</td>
+        <td>${item.patientEmergency}</td>
+      </tr>
+        `;
+      }
+    });
+  }
+}
